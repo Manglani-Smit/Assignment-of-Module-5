@@ -1,0 +1,23 @@
+================================================================================
+Interview Question: What is the difference between TokenAuthentication and SessionAuthentication?
+================================================================================
+
+Answer:
+In Django REST Framework, the choice between TokenAuthentication and SessionAuthentication depends entirely on the client type and the architecture of the application.
+
+1. SessionAuthentication:
+- State Management: Stateful. The session data is stored on the server (usually in the database or cache), and a unique Session ID is sent to the client.
+- Transport Mechanism: Relies on HTTP Cookies (sessionid cookie) and browser headers.
+- Security Concerns: Vulnerable to CSRF (Cross-Site Request Forgery). DRF requires a CSRF token for any unsafe HTTP methods (POST, PUT, PATCH, DELETE).
+- Best Use Case: Web applications with traditional frontends, server-rendered templates, or Single Page Applications (SPAs) running under the same domain.
+
+2. TokenAuthentication:
+- State Management: Stateless on the transport level. A static token key is generated for the user on the server. The client sends this token in the HTTP Authorization header (e.g., "Authorization: Token <token_key>").
+- Transport Mechanism: Pure HTTP Headers; does not rely on browser cookies.
+- Security Concerns: Immune to traditional CSRF attacks because tokens are not automatically sent by browsers like cookies are. However, tokens must be stored securely on the client to avoid XSS vulnerabilities.
+- Best Use Case: Native mobile applications (Android / iOS), cross-domain third-party APIs, and microservices where cookie handling is not feasible.
+
+Summary:
+- Use SessionAuthentication for same-origin browser clients where cookie-based security and CSRF protection are desired.
+- Use TokenAuthentication for mobile devices, decoupled frontends, and REST clients requiring header-based authentication.
+================================================================================
